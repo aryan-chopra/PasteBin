@@ -17,8 +17,7 @@ Entity.createEntity = async (request, response) => {
         await newEntity.save()
         response.status(StatusCodes.CREATED).json(
             {
-                message: "Entity create successfully",
-                data: newEntity
+                ...newEntity
             }
         )
     } catch (error) {

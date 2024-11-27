@@ -30,10 +30,10 @@ export default function Home() {
         <Container fluid className="h-100 m-0">
             <Row className="pb-3 h-100">
                 <Col md={7}>
-                    <CodingSpace updateFunction={setTitle}/>
+                    <CodingSpace updateFunction={setContent}/>
                 </Col>
                 <Col>
-                    <Form.Control className="w-75 fs-5" placeholder="Title" onChange={(e) => setContent(e.target.value)}/>
+                    <Form.Control className="w-75 fs-5" placeholder="Title" onChange={(e) => setTitle(e.target.value)}/>
 
                     <div className="dropdown-top-margin">
                         <DropdownMenu heading={"Syntax"} items={["None", "Java", "C", "C++", "GoLang"]} updateFunction={setLanguage} />
@@ -52,21 +52,25 @@ export default function Home() {
     )
 }
 
-function submit(data) {
+async function submit(data) {
 
-    for (let d of data) {
-        console.log(d);
-        
-    }
+    const response = await fetch("http://localhost:8080/create", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(
+            {
+            content: data[0],
+            title: data[1],
+            contentType: data[1],
+            expiresAfter: data[2]
+            }
+        )
+    })
+    
+    const responseData = await response.json()
 
-    // axios.post('/create', {
-    //     /*
-    //     content
-    //     title
-    //     expires after
-    //     content type
-    //     */
-
-        
-    // })
+    console.log(responseData._doc.url);
+    
 }
