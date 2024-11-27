@@ -2,15 +2,16 @@ import { useState } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 
-export default function DropdownMenu({ items, heading }) {
+export default function DropdownMenu({ items, heading, updateFunction }) {
 
     const [title, setTitle] = useState(items[0])
 
     let menuList = items.map((item) =>
-        <Dropdown.Item key={item} onClick={updateTitle} href='#'>{item}</Dropdown.Item>
+        <Dropdown.Item key={item} onClick={updateSelection} href='#'>{item}</Dropdown.Item>
     )
 
-    function updateTitle(e) {
+    function updateSelection(e) {
+        updateFunction(e.target.innerText)
         setTitle(e.target.innerText)
     }
 
