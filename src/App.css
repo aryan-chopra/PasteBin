@@ -1,3 +1,7 @@
 #dropdown-basic-button {
     min-width: 100%;
 }
+
+.dropdown-top-margin {
+    margin-top: 2rem;
+}
