@@ -1,6 +1,7 @@
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import DropdownMenu from "../components/DropdownMenu";
 import CodingSpace from "../components/CodingSpace";
+import axios from "axios";
 
 export default function Home() {
     return (
@@ -10,7 +11,7 @@ export default function Home() {
                     <CodingSpace />
                 </Col>
                 <Col>
-                    <Form.Control className="w-75 fs-5" placeholder="Title"/>
+                    <Form.Control className="w-75 fs-5" placeholder="Title" />
 
                     <div className="dropdown-top-margin">
                         <DropdownMenu heading={"Syntax"} items={["None", "Java", "C", "C++", "GoLang"]} />
@@ -21,10 +22,23 @@ export default function Home() {
                     </div>
 
                     <div className="position-fixed bottom-0 end-0 m-3">
-                        <Button variant="success" className="fs-5">Submit</Button>
+                        <Button onClick={submit} variant="success" className="fs-5">Submit</Button>
                     </div>
                 </Col>
             </Row>
         </Container>
     )
+}
+
+function submit() {
+    axios.post('/create', {
+        /*
+        content
+        title
+        expires after
+        content type
+        */
+
+        
+    })
 }
