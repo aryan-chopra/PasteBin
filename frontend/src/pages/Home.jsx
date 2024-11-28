@@ -7,33 +7,17 @@ import { useState } from "react";
 export default function Home() {
     const [content, setContent] = useState("")
     const [title, setTitle] = useState("")
-    const [language, setLanguage] =  useState("")
+    const [language, setLanguage] = useState("")
     const [expiresAfter, setExpiresAfter] = useState("")
-
-    // function updateContent(text) {
-    //     setContent(text)
-    // }
-
-    // function updateTitle(newTitle) {
-    //     setTitle(newTitle)
-    // }
-
-    // function updateLanguage(newLanguage) {
-    //     setLanguage(newLanguage)
-    // }
-
-    // function updateExpiryTime(time) {
-    //     setExpiresAfter(time)
-    // }
 
     return (
         <Container fluid className="h-100 m-0">
             <Row className="pb-3 h-100">
                 <Col md={7}>
-                    <CodingSpace updateFunction={setContent}/>
+                    <CodingSpace updateFunction={setContent} />
                 </Col>
                 <Col>
-                    <Form.Control className="w-75 fs-5" placeholder="Title" onChange={(e) => setTitle(e.target.value)}/>
+                    <Form.Control className="w-75 fs-5" placeholder="Title" onChange={(e) => setTitle(e.target.value)} />
 
                     <div className="dropdown-top-margin">
                         <DropdownMenu heading={"Syntax"} items={["None", "Java", "C", "C++", "GoLang"]} updateFunction={setLanguage} />
@@ -54,23 +38,37 @@ export default function Home() {
 
 async function submit(data) {
 
+    const reqBody = {
+        content: data[0],
+        title: data[1],
+        contentType: data[2],
+        expiresAfter: data[3]
+    }
+
+    console.log("Body: ");
+    console.log(reqBody);
+
+
+
     const response = await fetch("http://localhost:8080/create", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(
+            // reqBody
             {
-            content: data[0],
-            title: data[1],
-            contentType: data[1],
-            expiresAfter: data[2]
+                content: data[0],
+                title: data[1],
+                contentType: data[2],
+                expiresAfter: data[3]
             }
+
         )
     })
-    
+
     const responseData = await response.json()
 
     console.log(responseData._doc.url);
-    
+
 }

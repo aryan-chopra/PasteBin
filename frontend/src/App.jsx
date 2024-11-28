@@ -3,6 +3,7 @@ import AppNavbar from "./components/AppNavbar.jsx";
 import Home from "./pages/Home";
 import { Container, Row, Stack } from "react-bootstrap";
 import './App.css'
+import View from "./pages/View.jsx";
 
 export default function App() {
   return (
@@ -11,6 +12,7 @@ export default function App() {
         <AppNavbar />
         <Routes>
           <Route path="/" element={<Home />}></Route>
+          <Route path="/:postUrl" element={<View/>}></Route>
         </Routes>
       </Stack>
     </Router>
