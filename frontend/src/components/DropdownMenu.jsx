@@ -6,6 +6,17 @@ export default function DropdownMenu({ items, heading, updateFunction }) {
 
     const [title, setTitle] = useState(items[0])
 
+    let headingText
+    if (!heading) {
+        console.log("heading: " + heading);
+        headingText = <p className="mb-2 fs-5" style={{ display: "none" }}></p>
+    }
+
+    else {
+        console.log("rendering");
+        headingText = <p className="mb-2 fs-5" style={{ display: "inline-block" }}>{heading}</p>
+    }
+
     let menuList = items.map((item) =>
         <Dropdown.Item key={item} onClick={updateSelection} href='#'>{item}</Dropdown.Item>
     )
@@ -17,15 +28,10 @@ export default function DropdownMenu({ items, heading, updateFunction }) {
 
     return (
         <>
-            <p className="mb-2 fs-5" style={{ display: "inline-block" }}>{heading}</p>
+            {headingText}
 
-            <DropdownButton className='w-25' id="dropdown-basic-button" title={title}>
-                {console.log(menuList)}
-
+            <DropdownButton style={{width: '15vw'}} id="dropdown-basic-button" title={title}>
                 {menuList}
-                {/* <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-            <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">Something else</Dropdown.Item> */}
             </DropdownButton>
         </>
     )

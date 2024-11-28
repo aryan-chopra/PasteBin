@@ -1,4 +1,4 @@
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
 import DropdownMenu from "../components/DropdownMenu";
 import CodingSpace from "../components/CodingSpace";
 import axios from "axios";
@@ -10,21 +10,54 @@ export default function Home() {
     const [language, setLanguage] = useState("")
     const [expiresAfter, setExpiresAfter] = useState("")
 
+    const languageList = [
+        "None",
+        "C",
+        "C++",
+        "GoLang",
+        "Java"
+    ]
+
+    const expireAfterList = [
+        "Period",
+        "Burn After Read",
+        "1 Hour",
+        "1 Day",
+        "1 Week",
+        "2 Weeks",
+        "1 Month",
+        "6 Months",
+        "1 Year"
+    ]
+
     return (
         <Container fluid className="h-100 m-0">
             <Row className="pb-3 h-100">
                 <Col md={7}>
-                    <CodingSpace updateFunction={setContent} value={content}/>
+                    <CodingSpace updateFunction={setContent} value={content} />
                 </Col>
                 <Col>
                     <Form.Control className="w-75 fs-5" placeholder="Title" onChange={(e) => setTitle(e.target.value)} />
 
                     <div className="dropdown-top-margin">
-                        <DropdownMenu heading={"Syntax"} items={["None", "Java", "C", "C++", "GoLang"]} updateFunction={setLanguage} />
+                        <DropdownMenu heading={"Syntax"} items={languageList} updateFunction={setLanguage} />
                     </div>
 
                     <div className="dropdown-top-margin">
-                        <DropdownMenu heading={"Expires after"} items={["Never", "1 second", "1 minute", "1 hour", "1 day", "1 month", "1 year", "1 decade", "1 century", "1 eon", "1 proton life time"]} updateFunction={setExpiresAfter}></DropdownMenu>
+                        <Container className="m-0">
+                            <Row>
+                                <Col className="m-0 p-0">
+                                    <Form.Control placeholder="Duration (eg. 1, 2..)"/>
+                                </Col>
+                                <Col>
+                                    <DropdownMenu
+                                        // heading={"Expires after"}
+                                        items={expireAfterList}
+                                        updateFunction={setExpiresAfter}>
+                                    </DropdownMenu>
+                                </Col>
+                            </Row>
+                        </Container>
                     </div>
 
                     <div className="position-fixed bottom-0 end-0 m-3">
