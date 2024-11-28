@@ -14,7 +14,7 @@ export default function Home() {
         <Container fluid className="h-100 m-0">
             <Row className="pb-3 h-100">
                 <Col md={7}>
-                    <CodingSpace updateFunction={setContent} />
+                    <CodingSpace updateFunction={setContent} value={content}/>
                 </Col>
                 <Col>
                     <Form.Control className="w-75 fs-5" placeholder="Title" onChange={(e) => setTitle(e.target.value)} />
