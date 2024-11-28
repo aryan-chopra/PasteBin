@@ -5,16 +5,30 @@ import {
 } from 'http-status-codes'
 
 import Entity from '../models/entityModel.js'
+import calculateExpirationDate from '../utils/calculateExpirationDate.js'
 
 Entity.createEntity = async (request, response) => {
     try {
+        const requestBody = request.body
+        const expirationInterval = calculateExpirationDate(requestBody.expiresAfter)
+        
+        console.log(expirationInterval)
+        if (expirationInterval == -1) {
+            delete requestBody.expiresAfter
+        } else {
+            const expirationDate = new Date(Date.now() + expirationInterval)
+            requestBody.expiresAfter = expirationDate
+        }
+
         const newEntity = new Entity(
             {
                 url: nanoid(10),
-                ...request.body
+                ...requestBody
             }
         )
+
         await newEntity.save()
+        
         response.status(StatusCodes.CREATED).json(
             {
                 ...newEntity
@@ -23,7 +37,8 @@ Entity.createEntity = async (request, response) => {
     } catch (error) {
         response.status(StatusCodes.INTERNAL_SERVER_ERROR).json(
             {
-                message: "Failed to create entity " + error.name
+                message: "Failed to create entity ",
+                error: error.name
             }
         )
     }
@@ -42,7 +57,7 @@ Entity.getEntity = async (request, response) => {
         } else {
             response.status(StatusCodes.NOT_FOUND).json(
                 {
-                    message: "Entity not found"
+                    error: "Entity not found"
                 }
             )
         }

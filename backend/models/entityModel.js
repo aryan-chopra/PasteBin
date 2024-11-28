@@ -6,23 +6,27 @@ const entitySchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    content: { 
+    content: {
         type: String,
         required: true,
     },
-    title: { 
+    title: {
         type: String,
         required: true,
     },
-    contentType: { 
+    contentType: {
         type: String,
         required: true,
     },
-    expiresAfter: { 
-        type: String,
-        required: true,
+    expiresAfter: {
+        type: Date,
     },
 }, { timestamps: true, collection: "entities" })
+
+entitySchema.index(
+    { expiresAfter: 1 },
+    { expireAfterSeconds: 0 }
+)
 
 entitySchema.method("toJSON", function () {
     const { __v, _id, ...Object } = this.toObject()
