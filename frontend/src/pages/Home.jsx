@@ -5,12 +5,6 @@ import axios from "axios";
 import { useState } from "react";
 
 export default function Home() {
-    const [content, setContent] = useState("")
-    const [title, setTitle] = useState("")
-    const [language, setLanguage] = useState("")
-    const [expiryDuration, setExpiryDuration] = useState("")
-    const [expiryPeriod, setExpiryPeriod] = useState("")
-
     const languageList = [
         "None",
         "C",
@@ -19,23 +13,33 @@ export default function Home() {
         "Java"
     ]
 
-    const expireAfterList = [
+    const expiryPeriodList = [
         "Period",
         "Burn After Read",
-        "1 Hour",
-        "1 Day",
-        "1 Week",
-        "2 Weeks",
-        "1 Month",
-        "6 Months",
-        "1 Year"
+        "Seconds",
+        "Minutes",
+        "Hours",
+        "Days",
+        "Weeks",
+        "Months",
+        "Years"
     ]
+
+    const [content, setContent] = useState("")
+    const [title, setTitle] = useState("")
+    const [language, setLanguage] = useState(languageList[0])
+    const [expiryDuration, setExpiryDuration] = useState("")
+    const [expiryPeriod, setExpiryPeriod] = useState(expiryPeriodList[0])
 
     return (
         <Container fluid className="h-100 m-0">
             <Row className="pb-3 h-100">
                 <Col md={7}>
-                    <CodingSpace placeholder={"Content goes here"} updateFunction={setContent} value={content} />
+                    <CodingSpace 
+                    placeholder={"Content goes here"} 
+                    updateFunction={setContent} 
+                    value={content}
+                     />
                 </Col>
                 <Col>
                     <Form.Control className="w-75 fs-5" placeholder="Title" onChange={(e) => setTitle(e.target.value)} />
@@ -53,7 +57,7 @@ export default function Home() {
                                 </Col>
                                 <Col>
                                     <DropdownMenu
-                                        items={expireAfterList}
+                                        items={expiryPeriodList}
                                         updateFunction={setExpiryPeriod}>
                                     </DropdownMenu>
                                 </Col>
