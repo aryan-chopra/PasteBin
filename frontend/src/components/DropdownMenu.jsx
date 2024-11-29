@@ -14,7 +14,7 @@ export default function DropdownMenu({ items, heading, updateFunction }) {
 
     else {
         console.log("rendering");
-        headingText = <p className="mb-2 fs-5" style={{ display: "inline-block" }}>{heading}</p>
+        headingText = <p className="font-weight-bold mb-2 fs-5" style={{ display: "inline-block" }}>{heading}</p>
     }
 
     let menuList = items.map((item) =>

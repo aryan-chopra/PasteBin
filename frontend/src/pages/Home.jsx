@@ -8,7 +8,8 @@ export default function Home() {
     const [content, setContent] = useState("")
     const [title, setTitle] = useState("")
     const [language, setLanguage] = useState("")
-    const [expiresAfter, setExpiresAfter] = useState("")
+    const [expiryDuration, setExpiryDuration] = useState("")
+    const [expiryPeriod, setExpiryPeriod] = useState("")
 
     const languageList = [
         "None",
@@ -34,7 +35,7 @@ export default function Home() {
         <Container fluid className="h-100 m-0">
             <Row className="pb-3 h-100">
                 <Col md={7}>
-                    <CodingSpace updateFunction={setContent} value={content} />
+                    <CodingSpace placeholder={"Content goes here"} updateFunction={setContent} value={content} />
                 </Col>
                 <Col>
                     <Form.Control className="w-75 fs-5" placeholder="Title" onChange={(e) => setTitle(e.target.value)} />
@@ -44,16 +45,16 @@ export default function Home() {
                     </div>
 
                     <div className="dropdown-top-margin">
+                        <p className="font-weight-bold fs-5">Expires After</p>
                         <Container className="m-0">
                             <Row>
                                 <Col className="m-0 p-0">
-                                    <Form.Control placeholder="Duration (eg. 1, 2..)"/>
+                                    <Form.Control placeholder="Duration (eg. 1, 2..)" onChange={(e) => setExpiryDuration(e.target.value)} />
                                 </Col>
                                 <Col>
                                     <DropdownMenu
-                                        // heading={"Expires after"}
                                         items={expireAfterList}
-                                        updateFunction={setExpiresAfter}>
+                                        updateFunction={setExpiryPeriod}>
                                     </DropdownMenu>
                                 </Col>
                             </Row>
@@ -61,7 +62,7 @@ export default function Home() {
                     </div>
 
                     <div className="position-fixed bottom-0 end-0 m-3">
-                        <Button onClick={() => submit([content, title, language, expiresAfter])} variant="success" className="fs-5">Submit</Button>
+                        <Button onClick={() => submit([content, title, language, expiryDuration, expiryPeriod])} variant="success" className="fs-5">Submit</Button>
                     </div>
                 </Col>
             </Row>
@@ -75,7 +76,10 @@ async function submit(data) {
         content: data[0],
         title: data[1],
         contentType: data[2],
-        expiresAfter: data[3]
+        expiresAfter: {
+            expiryDuration: data[3],
+            expiryPeriod: data[4]
+        }
     }
 
     console.log("Body: ");
@@ -89,14 +93,7 @@ async function submit(data) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(
-            // reqBody
-            {
-                content: data[0],
-                title: data[1],
-                contentType: data[2],
-                expiresAfter: data[3]
-            }
-
+            reqBody
         )
     })
 
