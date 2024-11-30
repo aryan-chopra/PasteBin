@@ -1,29 +1,27 @@
-function calculateExpirationDate(interval) {
-    let seconds;
-    switch (interval) {
-        case "1 Hour":
-            seconds = 1 * 60 * 60
-            break
-        case "1 Day":
-            seconds = 24 * 60 * 60
-            break
-        case "1 Week":
-            seconds = 7 * 24 * 60 * 60
-            break
-        case "1 Month":
-            seconds = 30 * 24 * 60 * 60
-            break
-        case "6 Months":
-            seconds = 180 * 24 * 60 * 60
-            break
-        case "1 Year":
-            seconds = 365 * 24 * 60 * 60
-            break
+function calculateExpirationDate(expiryDuration, expiryPeriod) {
+    const secondsInAMinute = 60
+    const secondsInAnHour = secondsInAMinute * 60
+    const secondsInADay = secondsInAnHour * 24
+    const secondsInAWeek = secondsInADay * 7
+    const secondsInAMonth = secondsInADay * 30
+    const secondsInAnYear = secondsInADay * 365
+    
+    switch (expiryPeriod) {
+        case "Hours":
+            return secondsInAnHour * expiryDuration
+        case "Days":
+            return secondsInADay * expiryDuration
+        case "Weeks":
+            return secondsInAWeek * expiryDuration
+        case "Months":
+            return secondsInAMonth * expiryDuration
+        case "Years":
+            return secondsInAnYear * expiryDuration
+        case "Burn After Read":
+            return 0
         default:
-            seconds = -1
-            break
+            return -1
     }
-    return seconds
 }
 
 export default calculateExpirationDate

@@ -9,36 +9,54 @@ import calculateExpirationDate from '../utils/calculateExpirationDate.js'
 
 Entity.createEntity = async (request, response) => {
     try {
-        const requestBody = request.body
-        const expirationInterval = calculateExpirationDate(requestBody.expiresAfter)
-        
-        console.log(expirationInterval)
-        if (expirationInterval == -1) {
-            delete requestBody.expiresAfter
-        } else {
-            const expirationDate = new Date(Date.now() + expirationInterval)
-            requestBody.expiresAfter = expirationDate
+        const entityObject = {
+            url: nanoid(10),
+            ...(request.body)
         }
 
-        const newEntity = new Entity(
-            {
-                url: nanoid(10),
-                ...requestBody
-            }
+        if (entityObject.expiresAfter.expiryDuration <= 0) {
+            throw new Error("expiresAfter should be a natural number")
+        }
+
+        const expirationInterval = calculateExpirationDate(
+            Number(entityObject.expiresAfter.expiryDuration),
+            entityObject.expiresAfter.expiryPeriod
         )
 
-        await newEntity.save()
-        
-        response.status(StatusCodes.CREATED).json(
-            {
-                ...newEntity
-            }
-        )
+        if (expirationInterval == -1) {
+            delete entityObject.expiresAfter
+
+            console.log("This entity will never expire")
+        } else if (expirationInterval == 0) {
+            delete entityObject.expiresAfter
+            entityObject.burnAfterRead = true
+
+            console.log("This entity will expire after one read")
+        } else {
+            const expirationDate = new Date(Date.now() + expirationInterval * 1000)
+            entityObject.expiresAfter = expirationDate
+
+            console.log("This entity will expire on", expirationDate.toLocaleDateString())
+        }
+
+        const newEntity = new Entity({ ...entityObject })
+
+        newEntity.save()
+            .then(() => {
+                console.log("Created new entity", entityObject)
+                response.status(StatusCodes.CREATED).json({ url: entityObject.url })
+            })
+            .catch((error) => {
+                console.log(error.message)
+                response.status(StatusCodes.BAD_REQUEST).json({ message: error.message })
+            })
+
     } catch (error) {
+        console.error(error.message)
         response.status(StatusCodes.INTERNAL_SERVER_ERROR).json(
             {
-                message: "Failed to create entity ",
-                error: error.name
+                message: "Failed to create entity",
+                error: error.message
             }
         )
     }
@@ -49,24 +67,23 @@ Entity.getEntity = async (request, response) => {
     try {
         const entity = await Entity.findOne({ url: entityId })
         if (entity) {
-            response.status(StatusCodes.OK).json(
-                {
-                    data: entity 
-                }
-            )
+            if (entity.burnAfterRead) {
+                Entity.findOneAndDelete({ _id: entity._id })
+                    .then(deletedEntity => {
+                        response.status(StatusCodes.OK).json({ data: deletedEntity })
+                        console.log("Entity deleted successfully")
+                        console.log(deletedEntity)
+                    })
+                    .catch(error => {
+                        response.status(StatusCodes.BAD_REQUEST).json({ error: ReasonPhrases.BAD_REQUEST })
+                        console.log(error.name)
+                    })
+            }
         } else {
-            response.status(StatusCodes.NOT_FOUND).json(
-                {
-                    error: "Entity not found"
-                }
-            )
+            response.status(StatusCodes.NOT_FOUND).json({ error: "Entity not found" })
         }
     } catch (error) {
-        response.status(StatusCodes.INTERNAL_SERVER_ERROR).json(
-            {
-                message: error.name
-            }
-        )
+        response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.name })
     }
 }
 
