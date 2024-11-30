@@ -5,3 +5,7 @@
 .dropdown-top-margin {
     margin-top: 2rem;
 }
+
+.code-space::placeholder {
+    -webkit-text-fill-color: grey;
+}

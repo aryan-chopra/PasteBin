@@ -36,7 +36,7 @@ export default function CodingSpace({ placeholder, updateFunction, language, val
       </SyntaxHighlighter >
       <Form.Control
         as="textarea"
-        className='position-absolute top-0 h-100 fs-4 p-1'
+        className='position-absolute top-0 h-100 fs-4 p-1 code-space'
         disabled={readonly}
         onChange={(e) => updateFunction(e.target.value)}
         onKeyDown={onKeyDown}
