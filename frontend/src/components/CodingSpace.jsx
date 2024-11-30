@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
+import SyntaxHighlighter from 'react-syntax-highlighter';
 
-export default function CodingSpace({ placeholder, updateFunction, value, readonly = false }) {
+export default function CodingSpace({ placeholder, updateFunction, language, value, readonly = false }) {
   const [textArea, setTextArea] = useState(null)
 
   useEffect(() => {
@@ -26,17 +27,29 @@ export default function CodingSpace({ placeholder, updateFunction, value, readon
   }
 
   return (
-    <Form.Group className="mb-3 h-100 " controlId="exampleForm.ControlTextarea1">
+    <Form.Group className="position-relative mb-3 h-100 " controlId="exampleForm.ControlTextarea1">
+      <SyntaxHighlighter
+        className='bg-white h-100 fs-4 p-1 m-0'
+        language={language.toLowerCase()}
+      >
+        {value}
+      </SyntaxHighlighter >
       <Form.Control
         as="textarea"
-        className='h-100 fs-4'
+        className='position-absolute top-0 h-100 fs-4 p-1'
         disabled={readonly}
         onChange={(e) => updateFunction(e.target.value)}
         onKeyDown={onKeyDown}
         placeholder={placeholder}
         readOnly={readonly}
         rows={3}
-        style={{ resize: 'none' }}
+        style={{
+          resize: 'none',
+          backgroundColor: 'transparent',
+          color: 'black',
+          WebkitTextFillColor: 'transparent',
+          fontFamily: "SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace"
+        }}
         value={value} />
     </Form.Group>
   )

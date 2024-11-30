@@ -6,10 +6,10 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
     const languageList = [
-        "None",
+        "Text",
         "C",
-        "C++",
-        "GoLang",
+        "CPP",
+        "Go",
         "Java"
     ]
 
@@ -36,7 +36,8 @@ export default function Home() {
             <Row className="pb-3 h-100">
                 <Col md={7}>
                     <CodingSpace 
-                    placeholder={"Content goes here"} 
+                    placeholder={"Content goes here"}
+                    language={language}
                     updateFunction={setContent} 
                     value={content}
                      />
