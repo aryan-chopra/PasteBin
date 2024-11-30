@@ -2,7 +2,7 @@ import { Button, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
 import DropdownMenu from "../components/DropdownMenu";
 import CodingSpace from "../components/CodingSpace";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
     const languageList = [

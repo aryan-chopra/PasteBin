@@ -1,6 +1,16 @@
+import { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 
-export default function CodingSpace({placeholder, updateFunction, value, readonly = false }) {
+export default function CodingSpace({ placeholder, updateFunction, value, readonly = false }) {
+  const [textArea, setTextArea] = useState(null)
+
+  useEffect(() => {
+    if (textArea != null) {
+      textArea[0].selectionEnd = textArea[1] + 1
+      setTextArea(null)
+    }
+  }, [textArea])
+
   function onKeyDown(e) {
     if (e.key === 'Tab') {
       e.preventDefault()
@@ -11,6 +21,7 @@ export default function CodingSpace({placeholder, updateFunction, value, readonl
 
       const newText = value.substring(0, start) + '\t' + value.substring(end)
       updateFunction(newText)
+      setTextArea([textarea, start])
     }
   }
 
