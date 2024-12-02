@@ -50,6 +50,12 @@ const entitySchema = new mongoose.Schema({
     },
     expiresAfter: {
         type: Date,
+        validate: {
+            validator: function(expiresAfter) {
+                return expiresAfter > this.createdAt
+            },
+            message: "expiresAfter timestamp should succeed createdAt timestamp"
+        }
     },
 }, { timestamps: true, collection: "entities" })
 
