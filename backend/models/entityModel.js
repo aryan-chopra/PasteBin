@@ -4,10 +4,10 @@ const entitySchema = new mongoose.Schema({
     url: {
         type: String,
         required: [true, "Each entity must have a unique url"],
-        // validate: {
-        //     validator: urlValidator,
-        //     content: "A document already has this url"
-        // },
+        validate: {
+            validator: urlValidator,
+            content: "A document already has this url"
+        },
         unique: true,
     },
     burnAfterRead: {
@@ -65,10 +65,10 @@ function contentTypeValidator(contentType) {
     return validContentTypes.includes(contentType)
 }
 
-// async function urlValidator(url) {
-//     const exists = await Entity.findOne({ url: url })
-//     return !exists
-// }
+async function urlValidator(url) {
+    const exists = await Entity.findOne({ url: url })
+    return !exists
+}
 
 entitySchema.method("toJSON", function () {
     const { __v, _id, ...Object } = this.toObject()

@@ -11,7 +11,8 @@ Entity.createEntity = async (request, response) => {
     try {
         const entityObject = {
             url: nanoid(10),
-            ...(request.body)
+            ...(request.body),
+            burnAfterRead: false
         }
 
         if (entityObject.expiresAfter.expiryDuration <= 0) {
@@ -68,17 +69,18 @@ Entity.getEntity = async (request, response) => {
         const entity = await Entity.findOne({ url: entityId })
         console.log(entity)
         if (entity) {
-            if (entity.burnAfterRead != undefined) {
+            if (entity.burnAfterRead) {
                 Entity.findOneAndDelete({ _id: entity._id })
                     .then(deletedEntity => {
                         response.status(StatusCodes.OK).json({ data: deletedEntity })
-                        console.log("Entity deleted successfully")
-                        console.log(deletedEntity)
+                        console.log("Entity was set to Burn After Read, it has now been deleted")
                     })
                     .catch(error => {
                         response.status(StatusCodes.BAD_REQUEST).json({ error: ReasonPhrases.BAD_REQUEST })
                         console.log(error.name)
                     })
+            } else {
+                response.status(StatusCodes.OK).json({ data: entity })
             }
         } else {
             response.status(StatusCodes.NOT_FOUND).json({ error: "Entity not found" })
