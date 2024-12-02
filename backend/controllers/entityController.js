@@ -66,8 +66,9 @@ Entity.getEntity = async (request, response) => {
     const { entityId } = request.params
     try {
         const entity = await Entity.findOne({ url: entityId })
+        console.log(entity)
         if (entity) {
-            if (entity.burnAfterRead) {
+            if (entity.burnAfterRead != undefined) {
                 Entity.findOneAndDelete({ _id: entity._id })
                     .then(deletedEntity => {
                         response.status(StatusCodes.OK).json({ data: deletedEntity })
