@@ -67,7 +67,6 @@ Entity.getEntity = async (request, response) => {
     const { entityId } = request.params
     try {
         const entity = await Entity.findOne({ url: entityId })
-        console.log(entity)
         if (entity) {
             if (entity.burnAfterRead) {
                 Entity.findOneAndDelete({ _id: entity._id })
@@ -76,7 +75,7 @@ Entity.getEntity = async (request, response) => {
                         console.log("Entity was set to Burn After Read, it has now been deleted")
                     })
                     .catch(error => {
-                        response.status(StatusCodes.BAD_REQUEST).json({ error: ReasonPhrases.BAD_REQUEST })
+                        response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.name })
                         console.log(error.name)
                     })
             } else {
