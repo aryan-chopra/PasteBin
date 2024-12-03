@@ -51,13 +51,27 @@ Entity.createEntity = async (request, response) => {
 };
 
 Entity.getEntity = async (request, response) => {
-  const { entityId } = request.params;
-  try {
-    const entity = await Entity.findOne({ url: entityId });
-    if (!entity) {
-      response
-        .status(StatusCodes.NOT_FOUND)
-        .json({ error: "Entity not found" });
+    const { entityId } = request.params
+    try {
+        const entity = await Entity.findOne({ url: entityId })
+        if (!entity) {
+            response.status(StatusCodes.NOT_FOUND).json({ error: "Entity not found" })
+            return
+        }
+        if (entity.burnAfterRead) {
+            console.log("Entity is set to Brun After Read")
+            const result = await Entity.deleteOne({ _id: entity._id })
+            if (result.deletedCount == 0) {
+                console.error("Something went wrong, deletion failed")
+            } else {
+                console.log("Entity deleted successfully")
+            }
+        }
+        response.status(StatusCodes.OK).json({ data: entity })
+    } catch (error) {
+        console.log(error.message)
+        response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message })
+>>>>>>> d77f4c470aff3c23e206dc595577a7b01a26b70f
     }
     if (entity.burnAfterRead) {
       console.log("Entity is set to Brun After Read");
