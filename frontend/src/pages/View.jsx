@@ -30,9 +30,17 @@ export default function View() {
 
     if (resData == null) {
         fetch(url)
-            .then((response) => response.json())
-            .then((data) => setResData(data))
-            .catch((error) => console.log("Error: " + error))
+            .then((response) => {
+                if (response.ok) {
+                    return response.json()
+                }
+                throw new Error(response.statusText)
+            })
+            .then((data) => {
+                console.log("Writing")
+                setResData(data)
+            })
+            .catch((error) => console.log("Failed: " + error))
     }
 
     return (
@@ -46,6 +54,8 @@ function Display({ resBody }) {
     }
 
     else {
+        console.log("Not null");
+
         return (
             <Stack className="pl-3 pr-3">
                 <p className="font-weight-bold fs-3">{resBody.data.title}</p>
