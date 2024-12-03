@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { data, useLocation } from "react-router-dom";
 import CodingSpace from "../components/CodingSpace";
-import { Col, Container, Row, Stack} from "react-bootstrap";
+import { Col, Container, Row, Stack } from "react-bootstrap";
 
 export default function View() {
     const url = "http://localhost:8080" + useLocation().pathname
@@ -42,7 +42,11 @@ function Display({ resBody }) {
         return (
             <Stack className="pl-3 pr-3">
                 <p className="font-weight-bold fs-3">{resBody.data.title}</p>
-                <CodingSpace readonly={true} value={resBody.data.content}/>
+                <CodingSpace
+                    readonly={true}
+                    value={resBody.data.content}
+                    language={resBody.data.contentType}
+                    />
             </Stack>
         )
     }

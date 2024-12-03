@@ -104,6 +104,6 @@ async function submit(data) {
 
     const responseData = await response.json()
 
-    console.log(responseData._doc.url);
+    console.log(responseData.url);
 
 }
