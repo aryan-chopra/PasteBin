@@ -1,8 +1,8 @@
-import express from 'express'
-import Entity from '../controllers/entityController.js'
+import express from "express";
+import Entity from "../controllers/entityController.js";
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/:entityId', Entity.getEntity)
+router.get("/:entityId", Entity.getEntity);
 
-export default router
+export default router;
