@@ -50,12 +50,6 @@ const entitySchema = new mongoose.Schema({
     },
     expiresAfter: {
         type: Date,
-        validate: {
-            validator: function(expiresAfter) {
-                return expiresAfter > this.createdAt
-            },
-            message: "expiresAfter timestamp should succeed createdAt timestamp"
-        }
     },
 }, { timestamps: true, collection: "entities" })
 
@@ -63,6 +57,13 @@ entitySchema.index(
     { expiresAfter: 1 },
     { expireAfterSeconds: 0 }
 )
+
+entitySchema.pre("save", function(next) {
+    if (this.expiresAfter <= this.createdAt) {
+        return next(new Error("expiresAfter should succeed createdAt"))
+    }
+    next()
+})
 
 entitySchema.method("toJSON", function () {
     const { __v, _id, ...Object } = this.toObject()
