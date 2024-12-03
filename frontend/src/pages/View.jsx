@@ -8,24 +8,31 @@ export default function View() {
 
     const [resData, setResData] = useState(null);
 
+    // if (resData == null) {
+    //     getResponse(url).then(
+    //         response => {
+    //             if (response.ok) {
+    //                 getData(response).then(
+    //                     data => {
+    //                         console.log(data);
+    //                         setResData(data)
+    //                     }
+    //                 ),
+    //                     error => console.log("Error destructuring data: " + error)
+    //             }
+    //             else {
+    //                 console.log("Response has error: " + response.status)
+    //             }
+    //         }
+    //     ),
+    //         error => console.log("Error fetching response: " + error)
+    // }
+
     if (resData == null) {
-        getResponse(url).then(
-            response => {
-                if (response.ok) {
-                    getData(response).then(
-                        data => {
-                            console.log(data);
-                            setResData(data)
-                        }
-                    ),
-                        error => console.log("Error destructuring data: " + error)
-                }
-                else {
-                    console.log("Response has error: " + response.status)
-                }
-            }
-        ),
-            error => console.log("Error fetching response: " + error)
+        fetch(url)
+            .then((response) => response.json())
+            .then((data) => setResData(data))
+            .catch((error) => console.log("Error: " + error))
     }
 
     return (
@@ -46,7 +53,7 @@ function Display({ resBody }) {
                     readonly={true}
                     value={resBody.data.content}
                     language={resBody.data.contentType}
-                    />
+                />
             </Stack>
         )
     }

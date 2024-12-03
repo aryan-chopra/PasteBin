@@ -51,6 +51,7 @@ Entity.getEntity = async (request, response) => {
         const entity = await Entity.findOne({ url: entityId })
         if (!entity) {
             response.status(StatusCodes.NOT_FOUND).json({ error: "Entity not found" })
+            return
         }
         if (entity.burnAfterRead) {
             console.log("Entity is set to Brun After Read")
