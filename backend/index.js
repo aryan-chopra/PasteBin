@@ -1,8 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 
-import entityRoutes from "./routes/entityRoutes.js";
-import homeRoutes from "./routes/homeRoutes.js";
+import entityRoutes from "./routes/entity.js";
+import homeRoutes from "./routes/home.js";
+import authRoutes from "./routes/auth.js"
 import connectToDatabase from "./db.js";
 
 const app = express();
@@ -28,8 +29,9 @@ app.get("/", (req, res) => {
   res.send("yo");
 });
 
-app.use("/create", entityRoutes);
 app.use("/", homeRoutes);
+app.use("/create", entityRoutes);
+app.use("/auth", authRoutes);
 
 app.listen(PORT, (error) => {
   if (!error) {

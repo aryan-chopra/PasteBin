@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 
-import Entity from "../models/entityModel.js";
+import Entity from "../models/entity.js";
 import calculateExpirationDate from "../utils/calculateExpirationDate.js";
 
 Entity.createEntity = async (request, response) => {
