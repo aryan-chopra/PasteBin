@@ -1,8 +1,11 @@
-import mongoose from "mongoose";
+import jsonwebtoken from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import dotenv from "dotenv";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 
 import User from "../models/user.js";
+
+dotenv.config();
 
 User.create = async (request, response) => {
   const { email, username, password } = request.body;
@@ -47,8 +50,8 @@ User.authenticate = async (request, response) => {
 
   try {
     const user = await User.findOne({ username: username }).select("password");
-    
-    if (!user.password) {
+
+    if (!user || !user.password) {
       return response
         .status(StatusCodes.UNAUTHORIZED)
         .json({ message: "Invalid username or password" });
@@ -61,9 +64,16 @@ User.authenticate = async (request, response) => {
         .json({ message: "Invalid username or password" });
     }
 
+    const jwtSecret = process.env.JWT_SECRET;
+    const token = jsonwebtoken.sign(
+      { userId: user._id, email: user.email },
+      jwtSecret,
+      { expiresIn: "1h" },
+    );
+
     return response
       .status(StatusCodes.OK)
-      .json({ message: "Authentication successful" });
+      .json({ token, message: "Authentication successful" });
   } catch (err) {
     response
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
