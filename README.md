@@ -119,3 +119,18 @@ npm run dev
 cd ../frontend
 npm run dev
 ```
+
+# Directory Structure
+```plaintext
+PasteBin/
+├── backend/
+    ├── controllers/
+    ├── models/
+    ├── routes/
+    ├── utils/
+├── frontend/
+    ├── assets/
+    ├── src/
+        ├── components/
+        ├── pages/
+```
