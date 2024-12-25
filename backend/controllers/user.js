@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 
 import User from "../models/user.js";
+import Entity from "../models/entity.js";
 
 dotenv.config();
 
@@ -80,6 +81,44 @@ User.authenticate = async (request, response) => {
       .json({ message: "Something went wrong" });
     console.error(err);
   }
+};
+
+User.getAllEntities = (request, response) => {
+  const authHeader = request.headers.authorization;
+
+  if (!authHeader) {
+    return response
+      .status(StatusCodes.UNAUTHORIZED)
+      .json({ message: "Not token is provided" });
+  }
+
+  const token = authHeader.split(" ")[1];
+
+  jsonwebtoken.verify(
+    token,
+    process.env.JWT_SECRET,
+    async (err, decodedData) => {
+      if (err) {
+        return response
+          .status(StatusCodes.UNAUTHORIZED)
+          .json({ message: "The token is invalid" });
+      }
+      try {
+        const creator = await User.findById(decodedData.userId);
+        const entities = await Promise.all(
+            Object.values(creator.entities).map(id => Entity.findById(id))
+        )
+        return response
+          .status(StatusCodes.OK)
+          .json({ message: "Valid token", data: entities });
+      } catch (err) {
+        response
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ message: "Error fetching data" });
+        console.log(err);
+      }
+    },
+  );
 };
 
 export default User;

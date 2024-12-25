@@ -1,15 +1,29 @@
 import { nanoid } from "nanoid";
+import mongoose from "mongoose";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
+import jsonwebtoken from "jsonwebtoken"
 
 import Entity from "../models/entity.js";
+import User from "../models/user.js"
 import calculateExpirationDate from "../utils/calculateExpirationDate.js";
 
 Entity.createEntity = async (request, response) => {
   try {
+    const token = request.headers.authorization?.split(' ')[1];
+
+    let userId = null;
+    if (token) {
+        console.log("token detcted")
+        const decoded = jsonwebtoken.verify(token, process.env.JWT_SECRET);
+        console.log(decoded.userId)
+        userId = decoded.userId;
+    }
+    
     const entityObject = {
       url: nanoid(10),
       ...request.body,
       burnAfterRead: false,
+      createdBy: userId || null,
     };
 
     const expirationInterval = calculateExpirationDate(
@@ -40,6 +54,16 @@ Entity.createEntity = async (request, response) => {
 
     await newEntity.save();
 
+    if (userId) {
+        const user = await User.findById(userId)
+        console.log(userId)
+        if (user) {
+            user.entities.push(newEntity._id);
+            console.log("added to the entity list")
+            await user.save();
+        }
+    }
+    
     console.log("Created new entity", entityObject);
     response.status(StatusCodes.CREATED).json({ url: entityObject.url });
   } catch (error) {
