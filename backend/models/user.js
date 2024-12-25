@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
 import bcrypt from 'bcrypt'
+import Entity from "./entity.js"
 
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: [true, "Username is required"],
     minLength: [3, "Username must be at least 3 characters long"],
-    maxLength: [20, "Username musy be at most 20 characters long"],
+    maxLength: [20, "Username must be at most 20 characters long"],
     unique: true,
     select: false,
   },
@@ -23,6 +24,11 @@ const userSchema = new mongoose.Schema({
     minLength: [6, "Password must be at least 6 characters long"],
     select: false,
   },
+  entities: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'entity',
+    default: []
+  }],
 }, {timestamps: true, collection: "users"});
 
 userSchema.pre("save", async function (next) {

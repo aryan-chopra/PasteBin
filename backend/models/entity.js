@@ -53,6 +53,11 @@ const entitySchema = new mongoose.Schema(
     expiresAfter: {
       type: Date,
     },
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user',
+        default: null
+    }
   },
   { timestamps: true, collection: "entities" },
 );
