@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 
+import pastesRoutes from "./routes/pastes.js";
 import entityRoutes from "./routes/entity.js";
 import homeRoutes from "./routes/home.js";
 import authRoutes from "./routes/auth.js"
@@ -29,9 +30,10 @@ app.get("/", (req, res) => {
   res.send("yo");
 });
 
-app.use("/", homeRoutes);
 app.use("/create", entityRoutes);
 app.use("/auth", authRoutes);
+app.use("/pastes", pastesRoutes);
+app.use("/", homeRoutes);
 
 app.listen(PORT, (error) => {
   if (!error) {
