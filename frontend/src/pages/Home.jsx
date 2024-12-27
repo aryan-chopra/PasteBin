@@ -2,9 +2,12 @@ import { Button, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
 import DropdownMenu from "../components/DropdownMenu";
 import CodingSpace from "../components/CodingSpace";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 export default function Home() {
+    const [userState, setUserState] = useState(false)
+    // validateToken({ setUserState })
+
     const languageList = [
         "Text",
         "C",
@@ -32,15 +35,16 @@ export default function Home() {
     const [expiryPeriod, setExpiryPeriod] = useState(expiryPeriodList[0])
 
     return (
+        <>
         <Container fluid className="h-100 m-0">
             <Row className="pb-3 h-100">
                 <Col md={7}>
-                    <CodingSpace 
-                    placeholder={"Content goes here"}
-                    language={language}
-                    updateFunction={setContent} 
-                    value={content}
-                     />
+                    <CodingSpace
+                        placeholder={"Content goes here"}
+                        language={language}
+                        updateFunction={setContent}
+                        value={content}
+                    />
                 </Col>
                 <Col>
                     <Form.Control className="w-75 fs-5" placeholder="Title" onChange={(e) => setTitle(e.target.value)} />
@@ -72,6 +76,7 @@ export default function Home() {
                 </Col>
             </Row>
         </Container>
+        </>
     )
 }
 
@@ -104,4 +109,19 @@ async function submit(data) {
 
     console.log(responseData.url);
 
+}
+
+function validateToken({ setUserState }) {
+    let userData = localStorage.getItem("jwt")
+    if (userData) {
+        if (Date.now() > JSON.parse(userData).time + 3600000) {
+            localStorage.removeItem("jwt")
+            localStorage.setItem("login", false)
+            setUserState(false)
+        } else {
+            setUserState(true)
+        }
+    } else {
+        setUserState(false)
+    }
 }

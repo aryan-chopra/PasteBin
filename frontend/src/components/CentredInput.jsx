@@ -3,14 +3,14 @@ import { Form, Button, Stack } from "react-bootstrap"
 export default function CentredInput({ fields, button, errorMessage }) {
     let inputFields = fields.map((field) => {
         return (
-            <>
+            <div key={field.placeholder}>
             <p className="text-danger">{field.error}</p>
             <Form.Control
                 className="mx-auto mb-4 w-100 fs-5"
                 onChange={(e) => field.onChange(e.target.value)}
                 placeholder={field.placeholder}
                 type={field.type}/>
-            </>
+            </div>
         )
     })
     let error = <p>{errorMessage}</p>

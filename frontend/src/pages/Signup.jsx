@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Button, Form, Placeholder, Stack } from "react-bootstrap";
 import CentredInput from "../components/CentredInput";
 import { StatusCodes } from "http-status-codes";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../App";
 
 export default function Signup() {
+    const {user, setUser} = useContext(UserContext)
     const [username, updateUsername] = useState("")
     const [usernameError, updateUsernameError] = useState("")
     const [email, updateEmail] = useState("")
@@ -12,6 +15,8 @@ export default function Signup() {
     const [passwordError, updatePasswordError] = useState("")
     const [confirmPassword, updateConfirmPassword] = useState("")
     const [confirmPasswordError, updateConfirmPasswordError] = useState("")
+
+    const navigate = useNavigate()
 
     function setUsername(text) {
         updateUsername(text)
@@ -63,13 +68,13 @@ export default function Signup() {
             ]}
             button={{
                 text: "Sign Up",
-                onClick: () => submit({ email, username, password, confirmPassword, updateUsernameError, updateEmailError, updatePasswordError, updateConfirmPasswordError })
+                onClick: () => submit({ email, username, password, confirmPassword, updateUsernameError, updateEmailError, updatePasswordError, updateConfirmPasswordError, navigate, setUser })
             }}
         />
     )
 }
 
-async function submit({ email, username, password, confirmPassword, updateUsernameError, updateEmailError, updatePasswordError, updateConfirmPasswordError }) {
+async function submit({ email, username, password, confirmPassword, updateUsernameError, updateEmailError, updatePasswordError, updateConfirmPasswordError, navigate, setUser }) {
     if (username.length == 0) {
         updateUsernameError("Username can not be empty")
     } else if (email.length == 0) {
@@ -103,12 +108,14 @@ async function submit({ email, username, password, confirmPassword, updateUserna
         })
 
         const resData = await response.json()
-        if (response.status == StatusCodes.OK) {
+        if (response.status == StatusCodes.CREATED) {
             const tokenData = JSON.stringify({
                 token: resData.token,
                 time: Date.now()
             })
             localStorage.setItem("jwt", tokenData)
+            localStorage.setItem("login", true)
+            setUser(true)
             console.log("success")
             navigate("/")
         } else if (response.status == StatusCodes.CONFLICT) {
@@ -125,6 +132,7 @@ async function submit({ email, username, password, confirmPassword, updateUserna
                     break;
             }
         } else {
+            console.log("Error!!")
             updateUsernameError("Some error occured, please try again later")
         }
     }

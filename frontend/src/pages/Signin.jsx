@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import CentredInput from "../components/CentredInput";
 import { StatusCodes } from "http-status-codes"
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../App";
 
 export default function Signin() {
+    const {user, setUser} = useContext(UserContext)
     const [username, updateUsername] = useState("")
     const [password, updatePassword] = useState("")
     const [usernameError, updateUsernameError] = useState("")
@@ -37,13 +39,13 @@ export default function Signin() {
             ]}
             button={{
                 text: "Sign In",
-                onClick: () => submit({ username, password, navigate, updateUsernameError, updatePasswordError })
+                onClick: () => submit({ username, password, navigate, setUser, updateUsernameError, updatePasswordError })
             }}
         />
     )
 }
 
-async function submit({ username, password, navigate, updateUsernameError, updatePasswordError }) {
+async function submit({ username, password, navigate, setUser, updateUsernameError, updatePasswordError }) {
     if (username.length == 0) {
         updateUsernameError("Username can not be empty")
     }
@@ -71,6 +73,8 @@ async function submit({ username, password, navigate, updateUsernameError, updat
                 time: Date.now()
             })
             localStorage.setItem("jwt", tokenData)
+            localStorage.setItem("login", true)
+            setUser(true)
             console.log("success")
             navigate("/")
         } else if (response.status == StatusCodes.UNAUTHORIZED){
