@@ -18,13 +18,13 @@ User.create = async (request, response) => {
     if (duplicateEmail) {
       return response
         .status(StatusCodes.CONFLICT)
-        .json({ message: "An account already exists under this email" });
+        .json({ message: "email" });
     }
 
     if (duplicateUsername) {
       return response
         .status(StatusCodes.CONFLICT)
-        .json({ message: "This username is taken, please try another" });
+        .json({ message: "username" });
     }
 
     const user = new User({
