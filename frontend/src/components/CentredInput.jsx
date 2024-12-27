@@ -1,20 +1,23 @@
 import { Form, Button, Stack } from "react-bootstrap"
 
-export default function CentredInput({ fields, button }) {
+export default function CentredInput({ fields, button, errorMessage }) {
     let inputFields = fields.map((field) => {
         return (
+            <>
+            <p className="text-danger">{field.error}</p>
             <Form.Control
                 className="mx-auto mb-4 w-100 fs-5"
+                onChange={(e) => field.onChange(e.target.value)}
                 placeholder={field.placeholder}
-                onChange={(e) => field.onChange(e.target.value)} />
+                type={field.type}/>
+            </>
         )
     })
-
-    console.log(inputFields);
-
+    let error = <p>{errorMessage}</p>
 
     return (
         <Stack className="position-absolute top-50 start-50 translate-middle border rounded p-5 w-50">
+            {error}
             {inputFields}
             <Button onClick={button.onClick} className="fs-5">{button.text}</Button>
         </Stack>
