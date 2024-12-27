@@ -90,8 +90,6 @@ async function submit(data) {
     console.log("Body: ");
     console.log(reqBody);
 
-
-
     const response = await fetch("http://localhost:8080/create", {
         method: "POST",
         headers: {
