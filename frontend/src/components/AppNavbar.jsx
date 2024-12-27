@@ -20,7 +20,7 @@ export default function AppNavbar() {
   useEffect(() => {
     if (user == true) {
       setNavOptions([
-        <Nav.Link key={"Account"} href='#account'>Account</Nav.Link>,
+        <Nav.Link key={"Account"} href="/user">Account</Nav.Link>,
         <Nav.Link key={"Sign Out"} onClick={() => signOut({ setUser })}>Sign Out</Nav.Link>
       ])
     } else {

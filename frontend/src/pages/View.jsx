@@ -54,8 +54,6 @@ function Display({ resBody }) {
     }
 
     else {
-        console.log("Not null");
-
         return (
             <Stack className="pl-3 pr-3">
                 <p className="font-weight-bold fs-3">{resBody.data.title}</p>

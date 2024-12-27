@@ -7,6 +7,7 @@ import View from "./pages/View.jsx";
 import Signup from "./pages/Signup.jsx";
 import Signin from "./pages/Signin.jsx";
 import { createContext, useState } from "react";
+import User from "./pages/User.jsx";
 
 export const UserContext = createContext(false)
 
@@ -26,6 +27,7 @@ export default function App() {
             <Route path="/:postUrl" element={<View />}></Route>
             <Route path="/signup" element={<Signup />}></Route>
             <Route path="/signin" element={<Signin />}></Route>
+            <Route path="/user" element={<User />}></Route>
           </Routes>
         </Stack>
       </Router>

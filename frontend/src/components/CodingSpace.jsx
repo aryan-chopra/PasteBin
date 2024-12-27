@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 
-export default function CodingSpace({ placeholder, updateFunction, language, value, readonly = false }) {
+const CodingSpace = memo(function CodingSpace({ placeholder, updateFunction, language, value, readonly = false }) {
   const [textArea, setTextArea] = useState(null)
 
   useEffect(() => {
@@ -31,6 +31,7 @@ export default function CodingSpace({ placeholder, updateFunction, language, val
       <SyntaxHighlighter
         className='bg-white h-100 fs-4 p-1 m-0'
         language={language.toLowerCase()}
+        wrapLongLines={true}
       >
         {value}
       </SyntaxHighlighter >
@@ -48,9 +49,12 @@ export default function CodingSpace({ placeholder, updateFunction, language, val
           backgroundColor: 'transparent',
           color: 'black',
           WebkitTextFillColor: 'transparent',
-          fontFamily: "SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace"
+          fontFamily: "SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace",
+          overflow: "hidden"
         }}
         value={value} />
     </Form.Group>
   )
-}
+})
+
+export default CodingSpace
