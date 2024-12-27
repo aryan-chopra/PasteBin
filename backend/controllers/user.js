@@ -34,10 +34,17 @@ User.create = async (request, response) => {
     });
 
     await user.save();
+    
+    const jwtSecret = process.env.JWT_SECRET;
+    const token = jsonwebtoken.sign(
+      { userId: user._id, email: user.email },
+      jwtSecret,
+      { expiresIn: "1h" },
+    );
 
     response
       .status(StatusCodes.CREATED)
-      .json({ message: "User created successfully" });
+      .json({ token: token, message: "User created successfully" });
   } catch (err) {
     console.error(err);
     response
@@ -74,7 +81,7 @@ User.authenticate = async (request, response) => {
 
     return response
       .status(StatusCodes.OK)
-      .json({ token, message: "Authentication successful" });
+      .json({ token: token, message: "Authentication successful" });
   } catch (err) {
     response
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
