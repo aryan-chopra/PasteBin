@@ -5,13 +5,6 @@ const entitySchema = new mongoose.Schema(
     url: {
       type: String,
       required: [true, "Each entity must have a unique url"],
-      validate: {
-        validator: async function (url) {
-          const exists = await Entity.findOne({ url: url });
-          return !exists;
-        },
-        content: "A document already has this url",
-      },
       unique: true,
     },
     burnAfterRead: {
